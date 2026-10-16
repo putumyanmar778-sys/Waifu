@@ -1,0 +1,107 @@
+============================================================
+  HUSBANDOS & WAIFUS BOT — RUN လမ်းညွှန် (Termux / PC)
+============================================================
+
+== ၁။ Termux အသုံးပြုသူများအတွက် ==
+
+Termux ကို ဖွင့်ပြီး အောက်ပါ command များကို တစ်ခုချင်း ရိုက်ပါ:
+
+  pkg update -y && pkg upgrade -y
+  pkg install -y python python-pip git
+  pip install --upgrade pip
+
+== ၂။ Bot Token ရယူနည်း ==
+
+1. Telegram ထဲမှာ @BotFather ကို ရှာပြီး /start ပါ။
+2. /newbot ရိုက်ပါ။ Bot နာမည်နဲ့ username ပေးပါ။
+3. BotFather ပေးမည့် token (123456:AA.... ပုံစံ) ကို ကူးယူပါ။
+4. ⚠️ သင် စကားဝိုင်းထဲမှာ token တစ်ခေါက် ဖော်ပြပြီးသားဖြစ်သောကြောင့်
+   @BotFather → /mybots → သင့် bot → API Token → Revoke token ကို နှိပ်ပြီး
+   token အသစ် ပြန်ရယူပါ။ (နောက်ဆုံးပေးအပ်သည့် .env ထဲမှာ အသစ်ထည့်ပါ)
+
+== ၃။ Owner ID ရယူနည်း ==
+
+@userinfobot သို့မဟုတ် @getidsbot ကို /start လုပ်ပြီး သင့် ID ကြည့်ပါ။
+သင့် ID = 7738726467 (ပြီးသား ထည့်ပေးထားပါတယ်)
+
+== ၄။ Database Channel ဖန်တီးနည်း ==
+
+1. Telegram မှာ Channel အသစ် တစ်ခု ဖန်တီးပါ (ဥပမာ - "HW Bot DB")။
+2. Channel → Administrators → Add Admin → သင့် Bot ကို ထည့်ပါ။
+3. Permission များ - Post Messages, Edit Messages, Delete Messages ပေးပါ။
+4. Channel ကို Public လုပ်မှ username ရမည်။ Private လုပ်ထားလည်း ရပါတယ်။
+5. Channel ID ရယူနည်း - Channel ထဲမှာ message တစ်ခု ပို့ပြီး
+   @getidsbot ကို forward လုပ်ပါ (-100 နဲ့ စတဲ့ နံပါတ် ရလာမယ်)။
+
+== ၅။ Configuration ထည့်သွင်းနည်း ==
+
+Bot folder ထဲက .env ဖိုင်ကို ဖွင့်ပြီး ဖြည့်ပါ:
+
+  BOT_TOKEN=သင့်_အသစ်_token
+  OWNER_ID=7738726467
+  API_ID=my.telegram.org က ရလာသော နံပါတ်
+  API_HASH=my.telegram.org က ရလာသော hash
+  DB_CHANNEL_ID=-100xxxxxxxxxx
+
+API_ID / API_HASH ရယူနည်း - https://my.telegram.org ဝင်ပြီး
+API development tools → Create application လုပ်ပါ။
+(ဒါက Bot token မဟုတ်ပါ — user account login / channel scan အတွက်သာ လိုပါတယ်)
+
+Termux မှာ ဖိုင်ပြင်နည်း:
+  nano .env      (ပြင်ပြီး Ctrl+X, Y, Enter နှိပ်ပါ)
+
+== ၆။ Install & Run ==
+
+  pip install -r requirements.txt
+  python bot.py
+
+"Starting polling..." ဆိုတဲ့ log မြင်ရင် Bot အလုပ်လုပ်နေပြီ။
+Telegram ထဲမှာ သင့် bot ကို /start ပို့ကြည့်ပါ။
+
+== ၇။ စမ်းသပ်မှတ်တမ်း (Test Checklist) ==
+
+1. /start → Main menu ပေါ်လာမယ်
+2. .wa zani / .op zani / /wa zani / /op zani → character ရှာမယ်
+   (မရှိရင် "No character found" ပြမယ် - ဒါက normal ပါ)
+3. Owner account နဲ့ /setdb -100xxxxxxxxxx → DB channel သတ်မှတ်မယ်
+4. /addchar Zani | Wuthering Waves | zani-ww | waifu | SSR
+5. Photo တစ်ပုံပို့ပြီး reply လုပ်ပြီး .wa ရိုက် → image search
+6. /addass (bot ကို DM) → ဖုန်းနံပါတ် → code → password (၂SV ဖွင့်ထားရင်)
+7. /scan → ass account ဝင်ထားတဲ့ channel တွေကနေ media index လုပ်မယ်
+8. /channels / /searchstatus → search system အခြေအနေ
+9. data/ folder ကို ဖျက်ပြီး /recover → channel ကနေ data ပြန်ရယူမယ်
+
+== ၈။ Termux မှာ အဖြစ်များသော Error များ ==
+
+- "pip: command not found"
+    → pkg install -y python-pip
+- "externally-managed-environment" error
+    → pip install -r requirements.txt --break-system-packages
+- python-telegram-bot install မရ / build error
+    → pkg install -y build-essential libffi openssl rust
+      pip install --upgrade pip setuptools wheel
+- Telethon install မရ (Termux)
+    → pkg install -y clang libjpeg-turbo
+      pip install telethon
+- "BOT_TOKEN missing" / bot မစ
+    → .env ဖိုင် bot.py နဲ့ တထောက်တည်း ရှိနေမှု၊ စာလုံးပေါင်း စစ်ပါ။
+- Flood wait / 429 errors → Bot ကိုယ်တိုင် စောင့်ပြီး retry လုပ်ပါတယ်၊ စိတ်မဆိုးပါနဲ့။
+- "Cannot find entity" (ass account က channel ကို မမြင်ပါ)
+    → ass account နဲ့ ထို channel ကို join လုပ်ထားပါ၊ /scan ပြန်ခေါ်ပါ။
+
+== ၉။ Background Run (Termux) ==
+
+  nohup python bot.py > bot.log 2>&1 &
+  (ရပ်ချင်ရင်:  pkill -f bot.py   / log ကြည့်ရင်:  tail -f bot.log)
+
+Termux ပိတ်လိုက်ရင် ရပ်သွားမှာမို့ အမြဲ run ချင်ရင်:
+  pkg install -y termux-services
+  သို့မဟုတ် Termux:Boot app သုံးပါ။
+
+== ၁၀။ Hosting (Linux VPS / Heroku-style) ==
+
+  git clone <your repo> && cd <folder>
+  pip install -r requirements.txt
+  python bot.py
+
+⚠️ data/ folder နဲ့ .env ကို GitHub မတင်ပါနဲ့ (.gitignore ပြီးသား ထည့်ပေးထားပါတယ်)။
